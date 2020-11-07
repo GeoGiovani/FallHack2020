@@ -65,14 +65,14 @@ var background = Bodies.rectangle(0, 0, 1, 1, {
     render: {
         sprite: {
             texture: "media/background.png",
-            xScale: neededScale,
-            yScale: neededScale
+            xScale: canvasWidth,
+            yScale: canvasHeight
         }
     }
 });
 
 //Main world add
-World.add(world, background, [ground, rect1, platformRight, platformLeft, platformTop, bottomWall, topWall, rightWall, leftWall]);
+World.add(world, [ground, rect1, platformRight, platformLeft, platformTop, bottomWall, topWall, rightWall, leftWall], background);
 
 //Mouse --must be rendered after
 var mouse = Mouse.create(render.canvas); // add mouse control
