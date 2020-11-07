@@ -74,11 +74,9 @@ var worldConstraint = Constraint.create({
                                     length: 0
                                 });
 
-//Mouse
 
 
-
-
+//Main world add
 World.add(world, [rectangles, catapult, ground, rockOptions, rock, anchor, elastic, rect1, rect2, rect3, circle1, bottomWall, topWall, rightWall, leftWall, worldConstraint]);
 
 //Mouse --must be rendered after
