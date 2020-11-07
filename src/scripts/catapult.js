@@ -1,4 +1,7 @@
 import Matter from "matter-js";
+const height = 600;
+const width = 800;
+
 
 var Engine = Matter.Engine,
     Render = Matter.Render,
@@ -60,6 +63,15 @@ World.add(world, [
     Bodies.rectangle(250, 555, 20, 50, { isStatic: true }),
     Bodies.rectangle(400, 535, 20, 80, { isStatic: true, collisionFilter: { group: group } }),
     Bodies.circle(560, 100, 50, { density: 0.005 }),
+
+    //This is for the walls
+    Bodies.rectangle(width/2, 0,               width, 1,              { label: 'wall',isStatic: true }),   //bottom
+    Bodies.rectangle(width/2, height,   width, 1,              { label: 'wall',isStatic: true }),   //top
+    Bodies.rectangle(width,   height/2, 1,            height,  { label: 'wall',isStatic: true }),   //right
+    Bodies.rectangle(0,              height/2, 1,            height,  { label: 'wall',isStatic: true }),    //left
+    ground , rock, elastic,
+
+
     Constraint.create({
         bodyA: catapult,
         pointB: Vector.clone(catapult.position),
@@ -67,7 +79,6 @@ World.add(world, [
         length: 0
     })
 ]);
-World.add(engine.world, [ground, rock, elastic]);
 
 // add mouse control
 var mouse = Mouse.create(render.canvas),
