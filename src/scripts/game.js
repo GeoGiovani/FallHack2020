@@ -37,22 +37,22 @@ Render.run(render);
 
 /*
 //collsion detection
-function detectCollision(){
-    Events.on(engineObject, 'collisionStart', function(event) {
-      let pairs = event.pairs;
-      pairs.forEach(function(pair) {
-        if(pair.bodyA.label ==='tank' && pair.bodyB.label ==='bullet'){
-          World.remove(worldObject, pair.bodyB);
-          pair.bodyA.parent.health -= pair.bodyB.damage;
-          console.log(pair.bodyA.parent.health);
-        }
-        else if(pair.bodyA.label ==='bullet' && pair.bodyB.label ==='tank'){
+// function detectCollision(){
+//      Events.on(engineObject, 'collisionStart', function(event) {
+//       let pairs = event.pairs;
+//       pairs.forEach(function(pair) {
+//         if(pair.bodyA.label ==='tank' && pair.bodyB.label ==='bullet'){
+//            World.remove(worldObject, pair.bodyB);
+//           pair.bodyA.parent.health -= pair.bodyB.damage;
+//           console.log(pair.bodyA.parent.health);
+//         }
+//         else if(pair.bodyA.label ==='bullet' && pair.bodyB.label ==='tank'){
   
-          World.remove(worldObject, pair.bodyA);}
-        })
-    })
-  }
-  */
+//            World.remove(worldObject, pair.bodyA);}
+//         })
+//     })
+//   }
+
 
 //World Objects
 //var collisionGroup1 = Body.nextGroup(true); //groups for collision
@@ -90,12 +90,13 @@ var rightWall = Bodies.rectangle(canvasWidth, canvasHeight/2, 1, canvasHeight, {
 var leftWall = Bodies.rectangle(0, canvasHeight/2, 1, canvasHeight, {label: 'wall',isStatic: true});
 
 //background
-var background = Bodies.rectangle(800, 600, 1, 1, {
+
+var background = Bodies.rectangle(800, 600, canvasWidth, canvasHeight, {
     isStatic: true,
     isSensor: true,
     render: {
         sprite: {
-            texture: "media/background.png",
+            texture: "./media/background.png",
             xScale: canvasWidth,
             yScale: canvasHeight
         }
@@ -123,3 +124,4 @@ Render.lookAt(render, {
     min: { x: 0, y: 0 },
     max: { x: canvasWidth, y: canvasHeight }
 });
+*/
