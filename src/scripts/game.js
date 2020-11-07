@@ -35,6 +35,23 @@ var render = Render.create({ //Create object 'render' of type Render containing 
 });
 Render.run(render);
 
+//collsion detection
+function detectCollision(){
+    Events.on(engineObject, 'collisionStart', function(event) {
+      let pairs = event.pairs;
+      pairs.forEach(function(pair) {
+        if(pair.bodyA.label ==='tank' && pair.bodyB.label ==='bullet'){
+          World.remove(worldObject, pair.bodyB);
+          pair.bodyA.parent.health -= pair.bodyB.damage;
+          console.log(pair.bodyA.parent.health);
+        }
+        else if(pair.bodyA.label ==='bullet' && pair.bodyB.label ==='tank'){
+  
+          World.remove(worldObject, pair.bodyA);}
+        })
+    })
+  }
+
 //World Objects
 
 var collisionGroup1 = Body.nextGroup(true); //groups for collision
@@ -59,20 +76,20 @@ var leftWall = Bodies.rectangle(0, canvasHeight/2, 1, canvasHeight, {label: 'wal
 
 //background
 
-var background = Bodies.rectangle(0, 0, 1, 1, {
+var background = Bodies.rectangle(800, 600, 1, 1, {
     isStatic: true,
     isSensor: true,
     render: {
         sprite: {
             texture: "media/background.png",
-            xScale: neededScale,
-            yScale: neededScale
+            xScale: 800,
+            yScale: 600
         }
     }
 });
 
 //Main world add
-World.add(world, background, [ground, rect1, platformRight, platformLeft, platformTop, bottomWall, topWall, rightWall, leftWall]);
+World.add(world, [ground, rect1, platformRight, platformLeft, platformTop, bottomWall, topWall, rightWall, leftWall, background]);
 
 //Mouse --must be rendered after
 var mouse = Mouse.create(render.canvas); // add mouse control
