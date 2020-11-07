@@ -57,9 +57,22 @@ var topWall = Bodies.rectangle(canvasWidth/2, canvasHeight, canvasWidth, 1, {lab
 var rightWall = Bodies.rectangle(canvasWidth, canvasHeight/2, 1, canvasHeight, {label: 'wall',isStatic: true});
 var leftWall = Bodies.rectangle(0, canvasHeight/2, 1, canvasHeight, {label: 'wall',isStatic: true});
 
+//background
+
+var background = Bodies.rectangle(0, 0, 1, 1, {
+    isStatic: true,
+    isSensor: true,
+    render: {
+        sprite: {
+            texture: "media/background.png",
+            xScale: neededScale,
+            yScale: neededScale
+        }
+    }
+});
 
 //Main world add
-World.add(world, [ground, rect1, platformRight, platformLeft, platformTop, bottomWall, topWall, rightWall, leftWall]);
+World.add(world, background, [ground, rect1, platformRight, platformLeft, platformTop, bottomWall, topWall, rightWall, leftWall]);
 
 //Mouse --must be rendered after
 var mouse = Mouse.create(render.canvas); // add mouse control
