@@ -35,6 +35,7 @@ var render = Render.create({ //Create object 'render' of type Render containing 
 });
 Render.run(render);
 
+/*
 //collsion detection
 function detectCollision(){
     Events.on(engineObject, 'collisionStart', function(event) {
@@ -51,16 +52,30 @@ function detectCollision(){
         })
     })
   }
+  */
 
 //World Objects
-
-var collisionGroup1 = Body.nextGroup(true); //groups for collision
+//var collisionGroup1 = Body.nextGroup(true); //groups for collision
 var ground = Bodies.rectangle(395, 600, 515, 50, {isStatic: true}); //hardcoded for 600 x 800 display
 
-//Rectangle(s)
+//Rectangle(s) (Players)
 var rectangle_x = 50 //check and manipulate these to move rect1
 var rectangle_y = 70
 var rect1 = Bodies.rectangle(rectangle_x, rectangle_y, 40, 50);
+
+//Circles (Power-Ups)
+//Composites.stack(x,y, cols, rows, colGap, rowGap, creationFunc)
+var circles = Composites.stack(180, 200, 4, 4, 100, 80,
+    function(x, y){
+        return Bodies.circle(x, y, 15);
+    });
+
+//Triangles (Power-Downs)
+var triangles = Composites.stack(250, 250, 2, 2, 300, 250,
+    function(x, y){
+        return Bodies.trapezoid(x, y, 20, 20, 1);
+    });
+
 
 //Platform
 var platformRight = Bodies.rectangle(canvasWidth-625, canvasHeight-150, 225, 20, {isStatic: true})
@@ -75,7 +90,6 @@ var rightWall = Bodies.rectangle(canvasWidth, canvasHeight/2, 1, canvasHeight, {
 var leftWall = Bodies.rectangle(0, canvasHeight/2, 1, canvasHeight, {label: 'wall',isStatic: true});
 
 //background
-
 var background = Bodies.rectangle(800, 600, 1, 1, {
     isStatic: true,
     isSensor: true,
@@ -89,7 +103,7 @@ var background = Bodies.rectangle(800, 600, 1, 1, {
 });
 
 //Main world add
-World.add(world, [ground, rect1, platformRight, platformLeft, platformTop, bottomWall, topWall, rightWall, leftWall], background);
+World.add(world, [ground, rect1, circles, triangles, platformRight, platformLeft, platformTop, bottomWall, topWall, rightWall, leftWall], background);
 
 //Mouse --must be rendered after
 var mouse = Mouse.create(render.canvas); // add mouse control
