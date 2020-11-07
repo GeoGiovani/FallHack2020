@@ -34,3 +34,39 @@ var render = Render.create({ //Create object 'render' of type Render containing 
     }
 });
 Render.run(render);
+
+//World Objects
+var collisionGroup1 = Body.nextGroup(true); //groups for collision
+var ground = Bodies.rectangle(395, 600, 815, 50, {isStatic: true});
+var rect1 = Bodies.rectangle(150, 270, 40, 50, {isStatic: true});
+
+
+//Walls
+//Bodies.rectangle(x, y, width, height, {optionsJSON})
+var bottomWall = Bodies.rectangle(canvasWidth/2, 0, canvasWidth, 1, {label: 'wall', isStatic: true});
+var topWall = Bodies.rectangle(canvasWidth/2, canvasHeight, canvasWidth, 1, {label: 'wall',isStatic: true});
+var rightWall = Bodies.rectangle(canvasWidth, canvasHeight/2, 1, canvasHeight, {label: 'wall',isStatic: true});
+var leftWall = Bodies.rectangle(0, canvasHeight/2, 1, canvasHeight, {label: 'wall',isStatic: true});
+
+
+//Main world add
+World.add(world, [ground, rect1, bottomWall, topWall, rightWall, leftWall]);
+
+//Mouse --must be rendered after
+var mouse = Mouse.create(render.canvas); // add mouse control
+var mouseConstraint = MouseConstraint.create(physicsEngine, //must be added to world
+    {mouse: mouse,
+        constraint: {
+            stiffness: 0.2,
+            render: {visible: false}
+        }
+    });
+
+World.add(world, mouseConstraint)
+render.mouse = mouse; //keep the mouse in sync with rendering
+
+// fit the render viewport to the scene
+Render.lookAt(render, {
+    min: { x: 0, y: 0 },
+    max: { x: 800, y: 600 }
+});
