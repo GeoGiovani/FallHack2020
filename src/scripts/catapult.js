@@ -43,6 +43,15 @@ var stack = Composites.stack(250, 255, 1, 6, 0, 0, function (x, y) {
 });
 
 var catapult = Bodies.rectangle(400, 520, 320, 20, { collisionFilter: { group: group } });
+var ground = Bodies.rectangle(395, 600, 815, 50, { isStatic: true }),
+rockOptions = { density: 0.004 },
+rock = Bodies.polygon(170, 450, 8, 20, rockOptions),
+anchor = { x: 170, y: 450 },
+elastic = Constraint.create({ 
+    pointA: anchor, 
+    bodyB: rock, 
+    stiffness: 0.05
+});
 
 World.add(world, [
     stack,
@@ -58,6 +67,7 @@ World.add(world, [
         length: 0
     })
 ]);
+World.add(engine.world, [ground, rock, elastic]);
 
 // add mouse control
 var mouse = Mouse.create(render.canvas),
