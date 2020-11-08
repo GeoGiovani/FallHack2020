@@ -1,4 +1,4 @@
-FallHack2020 Hackathon
+<h1> Fall Hack 2020: Hackathon </h1>
 
 Our project centers on the battle between 2 blocks as they battle for survival, using power ups and speed to knock each other across the map. Whichever block can knock the other one off the screen first wins!
 
