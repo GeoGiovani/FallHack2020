@@ -6,4 +6,7 @@ Use WASD to play as Blue, and the the arrow keys to play as Red.
 
 Scattered throughout the map are pieces of Wild Power. These power ups may make you bigger and better, or just kill you entirely! Eat one to find out!
 
-Try to avoid the walls, while also pushing your opponent into them. The last block alive wins!
+Try to avoid the walls, while also pushing your opponent into them. The last block alive wins!  
+  
+Video demo:
+https://drive.google.com/drive/folders/1dm9s_XQ4IaucEuLebqPsVsY6yPivCSQ5?usp=sharing
