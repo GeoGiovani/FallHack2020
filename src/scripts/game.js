@@ -2,6 +2,7 @@ import Matter from "matter-js";
 import BG from './background.png';
 const canvasHeight = 600;
 const canvasWidth = 800;
+const playerSize = 50;
 
 //Init
 var Engine = Matter.Engine;
@@ -30,9 +31,8 @@ var render = Render.create({ //Create object 'render' of type Render containing 
     options: {
         width: 800,
         height: 600,
-        showAngleIndicator: true,
+        showAngleIndicator: false,
         showCollisions: true,
-        showVelocity: true,
         wireframes: false, //wireframes off
         background: BG
     }
@@ -46,46 +46,37 @@ Runner.run(runner, physicsEngine); //void
 
 //World Objects
 //var collisionGroup1 = Body.nextGroup(true); //groups for collision
-var ground = Bodies.rectangle(395, 600, 515, 50, { isStatic: true }); //hardcoded for 600 x 800 display
-ground.frictionStatic = 0
-ground.friction = 0.01
+var ground = Bodies.rectangle(395, 600, 515, 50, { isStatic: true, render: { fillStyle: "#964B00" } }); //hardcoded for 600 x 800 display
+ground.frictionStatic = 0.1
+ground.friction = 0.1
 
 var players = {
-    1: Bodies.rectangle(150, 270, 50, 50, { isStatic: false, label: 1 }),
-    2: Bodies.rectangle(400, 270, 50, 50, { isStatic: false, label: 2 })
+    1: Bodies.rectangle(150, 270, playerSize, playerSize, { isStatic: false, label: 'playerBlue' }),
+    2: Bodies.rectangle(400, 270, playerSize, playerSize, { isStatic: false, label: 'playerRed' })
 }
 
 //Circles (Power-Ups)
-//Composites.stack(x,y, cols, rows, colGap, rowGap, creationFunc)
-var circles = Composites.stack(180, 200, 4, 4, 100, 80,
-    function (x, y) {
-        return Bodies.circle(x, y, 15, { label: 'item' });
-    });
-
-//Triangles (Power-Downs)
-var triangles = Composites.stack(250, 250, 2, 2, 300, 250,
-    function (x, y) {
-        return Bodies.trapezoid(x, y, 20, 20, 1);
-    });
-
+var powers = {
+    1: Bodies.circle(200, 200, 15, { isStatic: true, render: { fillStyle: "#6A5ACD" }, label: 'power1' }),
+    2: Bodies.circle(440, 500, 15, { isStatic: true, render: { fillStyle: "#6A5ACD" }, label: 'power2' }),
+    3: Bodies.circle(700, 300, 15, { isStatic: true, render: { fillStyle: "#6A5ACD" }, label: 'power3' }),
+}
 
 //Platform
-var platformRight = Bodies.rectangle(canvasWidth - 625, canvasHeight - 150, 225, 20, { isStatic: true })
-var platformLeft = Bodies.rectangle(canvasWidth - 175, canvasHeight - 150, 225, 20, { isStatic: true })
-var platformTop = Bodies.rectangle(canvasWidth - 400, canvasHeight - 300, 225, 20, { isStatic: true })
+var platformRight = Bodies.rectangle(canvasWidth - 625, canvasHeight - 150, 225, 20, { isStatic: true });
+var platformLeft = Bodies.rectangle(canvasWidth - 175, canvasHeight - 150, 225, 20, { isStatic: true });
+var platformTop = Bodies.rectangle(canvasWidth - 400, canvasHeight - 300, 225, 20, { isStatic: true });
 
 //Walls
 //Bodies.rectangle(x, y, width, height, {optionsJSON})
 var bottomWall = Bodies.rectangle(canvasWidth / 2, 0, canvasWidth, 1, { label: 'wall', isStatic: true });
-var topWall = Bodies.rectangle(canvasWidth / 2, canvasHeight, canvasWidth, 1, { label: 'wall', isStatic: true });
+var topWall = Bodies.rectangle(canvasWidth / 2, canvasHeight, canvasWidth, 1, { isStatic: true });
 var rightWall = Bodies.rectangle(canvasWidth, canvasHeight / 2, 1, canvasHeight, { label: 'wall', isStatic: true });
 var leftWall = Bodies.rectangle(0, canvasHeight / 2, 1, canvasHeight, { label: 'wall', isStatic: true });
 
 //Main world add
 World.add(world,
     [ground,
-        circles,
-        triangles,
         platformRight,
         platformLeft,
         platformTop,
@@ -95,19 +86,69 @@ World.add(world,
         leftWall
     ]);
 
-function add_players() {
+function add_entities() {
     for (let num in players) {
         World.add(world, [players[num]]);
     }
+
+    for (let num in powers) {
+        powers[num].density = 0.01;
+        World.add(world, [powers[num]]);
+    }
 }
 
-add_players()
+add_entities()
 
-function powerUp(obj) {
-    obj.render.sprite.xScale = obj.render.sprite.xScale * 2;
+function powerUp(obj, power) {
+    if (power.position.x == 1000) {
+        return
+    }
+
+    if (powerupTimer[obj.label] != null) {
+        return;
+    }
+
+    obj.render.sprite.xScale = 1.5;
     obj.render.sprite.yScale = obj.render.sprite.yScale * 2;
-    Body.scale(obj, 2, 2);
+    Body.scale(obj, 1.5, 1.5);
 
+    // Scale down after 5 seconds
+    powerupTimer[obj.label] = setTimeout(function () {
+        Body.scale(obj, 0.8, 0.8)
+        obj.render.sprite.xScale = 0.8;
+        obj.render.sprite.yScale = 0.8;
+    }, 5000);
+}
+
+function removePlayer(player) {
+    player.position.x = 1000
+    player.position.y = 1000
+}
+
+function removePower(power) {
+    Body.setStatic(power, false)
+    power.position.x = 1000
+    power.position.y = 1000
+}
+
+function checkPlayerPower(pair) {
+    if (pair.bodyA.label.startsWith('player') && pair.bodyB.label.startsWith('power')) {
+        powerUp(pair.bodyA, pair.bodyB)
+        removePower(pair.bodyB)
+    }
+    else if (pair.bodyA.label.startsWith('power') && pair.bodyB.label.startsWith('player')) {
+        powerUp(pair.bodyB, pair.bodyA)
+        removePower(pair.bodyA)
+    }
+}
+
+function checkPlayerKilled(pair) {
+    if (pair.bodyA.label.startsWith('player') && pair.bodyB.label.startsWith('wall')) {
+        alert(`Congrats! You destroyed ${pair.bodyA.label.substring(6, pair.bodyA.label.length)}!`);
+    }
+    else if (pair.bodyA.label.startsWith('wall') && pair.bodyB.label.startsWith('player')) {
+        alert(`Congrats! You destroyed ${pair.bodyB.label.substring(6, pair.bodyB.label.length)}!`);
+    }
 }
 
 //collsion detection
@@ -115,23 +156,8 @@ function detectCollision() {
     Events.on(physicsEngine, 'collisionStart', function (event) {
         let pairs = event.pairs;
         pairs.forEach(function (pair) {
-            if (pair.bodyA.label === 'player' && pair.bodyB.label === 'item') {
-                powerUp(pair.bodyA)
-                console.log("10");
-            }
-            else if (pair.bodyA.label === 'item' && pair.bodyB.label === 'player') {
-                console.log("20");
-                World.remove(world, pair.bodyB);
-            }
-            else if (pair.bodyA.label === 'player2' && pair.bodyB.label === 'player') {
-                powerUp(pair.bodyA)
-                World.remove(world, pair.bodyB);
-                console.log("10");
-            }
-            else if (pair.bodyA.label === 'player' && pair.bodyB.label === 'player2') {
-                console.log("20");
-                World.remove(world, pair.bodyA);
-            }
+            checkPlayerPower(pair);
+            checkPlayerKilled(pair);
         })
     })
 }
@@ -147,6 +173,7 @@ Render.lookAt(render, {
 var state = {};
 var movementLeft = {};
 var movementRight = {};
+var powerupTimer = {};
 
 function setup_players() {
     for (let num in players) {
@@ -154,6 +181,7 @@ function setup_players() {
         players[num].frictionAir = 0
         movementLeft[num] = null;
         movementRight[num] = null;
+        state[num] = "grounded";
     }
 }
 
@@ -208,7 +236,7 @@ export function moveUp(playerNum) {
     if (state[playerNum] !== "jumping") {
         Body.setVelocity(players[playerNum], {
             x: players[playerNum].velocity.x,
-            y: -8
+            y: -10
         })
 
         state[playerNum] = "jumping"
