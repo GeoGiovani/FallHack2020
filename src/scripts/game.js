@@ -146,19 +146,7 @@ function detectCollision(){
     })
   }
 
-  
-//Mouse --must be rendered after
-var mouse = Mouse.create(render.canvas); // add mouse control
-var mouseConstraint = MouseConstraint.create(physicsEngine, //must be added to world
-    {mouse: mouse,
-        constraint: {
-            stiffness: 0.2,
-            render: {visible: false}
-        }
-    });
 
-World.add(world, mouseConstraint)
-render.mouse = mouse; //keep the mouse in sync with rendering
 detectCollision()
 // fit the render viewport to the scene
 Render.lookAt(render, {
