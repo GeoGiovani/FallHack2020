@@ -1,3 +1,6 @@
 #game{
-    background-color: 'blue';
+    background: transparent
+}
+#root{
+    background-color: green;
 }

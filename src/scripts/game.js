@@ -52,7 +52,7 @@ var ground = Bodies.rectangle(395, 600, 515, 50, {isStatic: true}); //hardcoded 
 //Rectangle(s) (Players)
 var rectangle_x = 50 //check and manipulate these to move rect1
 var rectangle_y = 70
-var rect1 = Bodies.rectangle(rectangle_x, rectangle_y, 40, 50);
+var rect1 = Bodies.rectangle(rectangle_x, rectangle_y, 40, 50, {label: 'player2'});
 
 //Circles (Power-Ups)
 //Composites.stack(x,y, cols, rows, colGap, rowGap, creationFunc)
@@ -106,6 +106,13 @@ var worldConstraint = Constraint.create({
 //Main world add
 World.add(world, [ground, rect1, circles, triangles, platformRight, platformLeft, platformTop, bottomWall, topWall, rightWall, leftWall, player, worldConstraint], background);
 
+function powerUp(obj){
+    obj.render.sprite.xScale = obj.render.sprite.xScale * 2;
+    obj.render.sprite.yScale = obj.render.sprite.yScale * 2;
+    Body.scale( obj, 2, 2);
+
+}
+
 //collsion detection
 function detectCollision(){
     Events.on(physicsEngine, 'collisionStart', function(event) {
@@ -119,10 +126,22 @@ function detectCollision(){
            console.log("20");
            World.remove(world, pair.bodyB);
         }  
+        else if(pair.bodyA.label ==='player2' && pair.bodyB.label ==='player'){
+            powerUp(pair.bodyA)
+            World.remove(world, pair.bodyB);
+            console.log("10");
+          }
+        else if(pair.bodyA.label ==='player' && pair.bodyB.label ==='player2'){
+             console.log("20");
+             powerUp(pair.bodyB)
+             World.remove(world, pair.bodyA);
+          }
           //World.remove(world, pair.bodyB);}
         })
     })
   }
+
+  
 //Mouse --must be rendered after
 var mouse = Mouse.create(render.canvas); // add mouse control
 var mouseConstraint = MouseConstraint.create(physicsEngine, //must be added to world
