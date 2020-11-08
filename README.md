@@ -9,8 +9,10 @@ Scattered throughout the map are pieces of Wild Power. These power ups may make 
 Try to avoid the walls, while also pushing your opponent into them. The last block alive wins!
 
 To Build:
-Run 'npm install' to install dependencies
+Run 'npm install' to install dependencies.
+
 Run 'npm start' to run. 
+
 The game will be running on "http://localhost:3000" (port 3000)
   
 Video demo:
