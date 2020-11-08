@@ -35,24 +35,30 @@ var render = Render.create({ //Create object 'render' of type Render containing 
 });
 Render.run(render);
 
-/*
+
+// create runner
+var runner = Runner.create();
+Runner.run(runner, physicsEngine); //void
+
+
+
 //collsion detection
 function detectCollision(){
-    Events.on(engineObject, 'collisionStart', function(event) {
+    Events.on(physicsEngine, 'collisionStart', function(event) {
       let pairs = event.pairs;
       pairs.forEach(function(pair) {
-        if(pair.bodyA.label ==='tank' && pair.bodyB.label ==='bullet'){
-          World.remove(worldObject, pair.bodyB);
-          pair.bodyA.parent.health -= pair.bodyB.damage;
-          console.log(pair.bodyA.parent.health);
+        if(pair.bodyA.label ==='player' && pair.bodyB.label ==='item'){
+          //World.remove(world, pair.bodyA);
+          console.log("10");
         }
-        else if(pair.bodyA.label ==='bullet' && pair.bodyB.label ==='tank'){
-  
-          World.remove(worldObject, pair.bodyA);}
+        else if(pair.bodyA.label ==='item' && pair.bodyB.label ==='player'){
+           console.log("20");
+        }  
+          //World.remove(world, pair.bodyB);}
         })
     })
   }
-  */
+  
 
 //World Objects
 //var collisionGroup1 = Body.nextGroup(true); //groups for collision
@@ -67,7 +73,7 @@ var rect1 = Bodies.rectangle(rectangle_x, rectangle_y, 40, 50);
 //Composites.stack(x,y, cols, rows, colGap, rowGap, creationFunc)
 var circles = Composites.stack(180, 200, 4, 4, 100, 80,
     function(x, y){
-        return Bodies.circle(x, y, 15);
+        return Bodies.circle(x, y, 15,{label: 'item'});
     });
 
 //Triangles (Power-Downs)
@@ -102,8 +108,17 @@ var background = Bodies.rectangle(800, 600, 1, 1, {
     }
 });
 
+//This will be the player
+var player = Bodies.rectangle(150, 85, 25, 25, {label:'player'});
+var worldConstraint = Constraint.create({
+    bodyA: player,
+    pointB: Vector.clone(player.position),
+    stiffness: 1,
+    length: 0
+});
+
 //Main world add
-World.add(world, [ground, rect1, circles, triangles, platformRight, platformLeft, platformTop, bottomWall, topWall, rightWall, leftWall], background);
+World.add(world, [ground, rect1, circles, triangles, platformRight, platformLeft, platformTop, bottomWall, topWall, rightWall, leftWall, player, worldConstraint], background);
 
 //Mouse --must be rendered after
 var mouse = Mouse.create(render.canvas); // add mouse control
@@ -117,7 +132,7 @@ var mouseConstraint = MouseConstraint.create(physicsEngine, //must be added to w
 
 World.add(world, mouseConstraint)
 render.mouse = mouse; //keep the mouse in sync with rendering
-
+detectCollision()
 // fit the render viewport to the scene
 Render.lookAt(render, {
     min: { x: 0, y: 0 },
