@@ -1,5 +1,7 @@
 <h1> Fall Hack 2020: Hackathon </h1>
 
+<h2> All Squares Condone Inquisition Immediately </h2>
+
 Our project centers on the battle between 2 blocks as they battle for survival, using power ups and speed to knock each other across the map. Whichever block can knock the other one off the screen first wins!
 
 Use WASD to play as Blue, and the the arrow keys to play as Red.
