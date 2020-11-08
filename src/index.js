@@ -1,4 +1,3 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+require('./scripts/game');
+require('./scripts/input_handler');
 
-require('./scripts/catapult');

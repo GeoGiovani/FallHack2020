@@ -1,4 +1,4 @@
-// import { hook name } from './catapult';
+import { moveLeft, moveRight, moveUp, stopLeft, stopRight } from './game';
 
 var input_receiver = document.body
 
@@ -12,15 +12,15 @@ function setup_event_listeners() {
 		input_receiver.addEventListener('keydown', function (event) {
 			switch (event.key) {
 				case players[i].left:
-					console.log(`player ${i} moved left`)
+					moveLeft(i)
 					break
 
 				case players[i].right:
-					console.log(`player ${i} moved right`)
+					moveRight(i)
 					break
 
 				case players[i].up:
-					console.log(`player ${i} moved up`)
+					moveUp(i)
 					break
 
 				default:
@@ -31,15 +31,11 @@ function setup_event_listeners() {
 		input_receiver.addEventListener('keyup', function (event) {
 			switch (event.key) {
 				case players[i].left:
-					console.log(`player ${i} stopped moving left`)
+					stopLeft(i)
 					break
 
 				case players[i].right:
-					console.log(`player ${i} stopped moving right`)
-					break
-
-				case players[i].up:
-					console.log(`player ${i} stopped moving up`)
+					stopRight(i)
 					break
 
 				default:
