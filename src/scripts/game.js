@@ -42,22 +42,7 @@ Runner.run(runner, physicsEngine); //void
 
 
 
-//collsion detection
-function detectCollision(){
-    Events.on(physicsEngine, 'collisionStart', function(event) {
-      let pairs = event.pairs;
-      pairs.forEach(function(pair) {
-        if(pair.bodyA.label ==='player' && pair.bodyB.label ==='item'){
-          //World.remove(world, pair.bodyA);
-          console.log("10");
-        }
-        else if(pair.bodyA.label ==='item' && pair.bodyB.label ==='player'){
-           console.log("20");
-        }  
-          //World.remove(world, pair.bodyB);}
-        })
-    })
-  }
+
   
 
 //World Objects
@@ -121,6 +106,23 @@ var worldConstraint = Constraint.create({
 //Main world add
 World.add(world, [ground, rect1, circles, triangles, platformRight, platformLeft, platformTop, bottomWall, topWall, rightWall, leftWall, player, worldConstraint], background);
 
+//collsion detection
+function detectCollision(){
+    Events.on(physicsEngine, 'collisionStart', function(event) {
+      let pairs = event.pairs;
+      pairs.forEach(function(pair) {
+        if(pair.bodyA.label ==='player' && pair.bodyB.label ==='item'){
+          //World.remove(world, pair.bodyA);
+          console.log("10");
+        }
+        else if(pair.bodyA.label ==='item' && pair.bodyB.label ==='player'){
+           console.log("20");
+           World.remove(world, pair.bodyB);
+        }  
+          //World.remove(world, pair.bodyB);}
+        })
+    })
+  }
 //Mouse --must be rendered after
 var mouse = Mouse.create(render.canvas); // add mouse control
 var mouseConstraint = MouseConstraint.create(physicsEngine, //must be added to world
