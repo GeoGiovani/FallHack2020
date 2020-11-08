@@ -96,12 +96,13 @@ var rightWall = Bodies.rectangle(canvasWidth, canvasHeight/2, 1, canvasHeight, {
 var leftWall = Bodies.rectangle(0, canvasHeight/2, 1, canvasHeight, {label: 'wall',isStatic: true});
 
 //background
-var background = Bodies.rectangle(800, 600, 1, 1, {
+
+var background = Bodies.rectangle(800, 600, canvasWidth, canvasHeight, {
     isStatic: true,
     isSensor: true,
     render: {
         sprite: {
-            texture: "media/background.png",
+            texture: "./media/background.png",
             xScale: canvasWidth,
             yScale: canvasHeight
         }
