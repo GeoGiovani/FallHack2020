@@ -1,4 +1,5 @@
 import Matter from "matter-js";
+import BG from './background.png';
 const canvasHeight = 600;
 const canvasWidth = 800;
 
@@ -25,12 +26,15 @@ var world = physicsEngine.world; //World object can contain many worlds, we only
 var render = Render.create({ //Create object 'render' of type Render containing rendering attributes
     element: document.body,
     engine: physicsEngine,
+
     options: {
         width: 800,
         height: 600,
         showAngleIndicator: true,
         showCollisions: true,
-        showVelocity: true
+        showVelocity: true,
+        wireframes: false, //wireframes off
+        background: BG
     }
 });
 Render.run(render);
@@ -80,14 +84,14 @@ var topWall = Bodies.rectangle(canvasWidth/2, canvasHeight, canvasWidth, 1, {lab
 var rightWall = Bodies.rectangle(canvasWidth, canvasHeight/2, 1, canvasHeight, {label: 'wall',isStatic: true});
 var leftWall = Bodies.rectangle(0, canvasHeight/2, 1, canvasHeight, {label: 'wall',isStatic: true});
 
-//background
-
-var background = Bodies.rectangle(800, 600, canvasWidth, canvasHeight, {
+//Background
+var background = Bodies.rectangle(0,0,canvasWidth*2,canvasHeight*2, {
     isStatic: true,
     isSensor: true,
     render: {
         sprite: {
             texture: "./media/background.png",
+            //color: 'blue',
             xScale: canvasWidth,
             yScale: canvasHeight
         }
@@ -104,7 +108,8 @@ var worldConstraint = Constraint.create({
 });
 
 //Main world add
-World.add(world, [ground, rect1, circles, triangles, platformRight, platformLeft, platformTop, bottomWall, topWall, rightWall, leftWall, player, worldConstraint], background);
+World.add(world, [ground, rect1, circles, triangles, platformRight, platformLeft, platformTop, bottomWall, topWall, rightWall, leftWall, player, worldConstraint]);
+//World.add(world, background)
 
 //collsion detection
 function detectCollision(){
