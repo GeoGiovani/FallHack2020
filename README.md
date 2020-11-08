@@ -10,7 +10,8 @@ Try to avoid the walls, while also pushing your opponent into them. The last blo
 
 To Build:
 Run 'npm install' to install dependencies
-Run 'npm start' to run. The game will be running on "http://localhost:3000" (port 3000)
+Run 'npm start' to run. 
+The game will be running on "http://localhost:3000" (port 3000)
   
 Video demo:
 https://drive.google.com/drive/folders/1dm9s_XQ4IaucEuLebqPsVsY6yPivCSQ5?usp=sharing
